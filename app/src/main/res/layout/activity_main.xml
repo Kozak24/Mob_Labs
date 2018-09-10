@@ -23,26 +23,29 @@
         android:inputType="text" />
 
 
-    <Button
+    <ImageButton
         android:id="@+id/clearButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:background="@drawable/styles"
-        android:text="@string/clear" />
+        app:srcCompat="@android:drawable/ic_delete" />
 
     <Button
         android:id="@+id/helloButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:background="@drawable/styles"
-        android:layout_below="@id/name"
         android:text="@string/say_hello" />
 
     <TextView
         android:id="@+id/textView"
-        android:layout_below="@+id/helloButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:gravity="center"
+        android:layout_width="78dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/helloButton"
+        android:layout_marginTop="142dp" />
 
 </RelativeLayout>

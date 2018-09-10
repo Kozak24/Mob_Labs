@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Button clearButton = (Button) findViewById(R.id.clearButton);
+        final ImageButton clearButton = (ImageButton) findViewById(R.id.clearButton);
         final Button helloButton = (Button) findViewById(R.id.helloButton);
         final EditText namePlaceholder = (EditText) findViewById(R.id.name);
         final TextView textView = (TextView) findViewById(R.id.textView);
