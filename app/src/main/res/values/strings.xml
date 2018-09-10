@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">labs</string>
+    <string name="app_name">Labs</string>
+    <string name="clear">Clear</string>
+    <string name="input_name">Input your name</string>
+    <string name="say_hello">Say hello!</string>
 </resources>
