@@ -13,39 +13,68 @@
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/name"
+        android:id="@+id/first_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@id/clearButton"
-        android:hint="@string/input_name"
-        android:inputType="text" />
+        android:hint="@string/input_first_name"
+        android:inputType="textPersonName" />
 
 
-    <ImageButton
-        android:id="@+id/clearButton"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/last_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/styles"
-        app:srcCompat="@android:drawable/ic_delete" />
+        android:layout_below="@+id/first_name"
+        android:hint="@string/input_last_name"
+        android:inputType="textPersonName" />
 
-    <Button
-        android:id="@+id/helloButton"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="@drawable/styles"
-        android:text="@string/say_hello" />
+        android:layout_below="@+id/last_name"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email"
+        android:hint="@string/phone"
+        android:inputType="phone" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/phone"
+        android:hint="@string/password"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/confirm_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/password"
+        android:hint="@string/confirm_password"
+        android:inputType="textPassword" />
 
     <TextView
-        android:id="@+id/textView"
-        android:gravity="center"
-        android:layout_width="78dp"
+        android:id="@+id/error_list"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/helloButton"
-        android:layout_marginTop="142dp" />
+        android:layout_below="@+id/submitButton"/>
+
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="90dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/confirm_password"
+        android:background="@drawable/styles"
+        android:text="@string/submit" />
 
 </RelativeLayout>
