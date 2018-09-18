@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">Labs</string>
-    <string name="clear">Clear</string>
-    <string name="input_name">Input your name</string>
-    <string name="say_hello">Say hello!</string>
+    <string name="app_name">Lab 3</string>
+    <string name="input_first_name">First name</string>
+    <string name="input_last_name">Last name</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="submit">Submit</string>
 </resources>
