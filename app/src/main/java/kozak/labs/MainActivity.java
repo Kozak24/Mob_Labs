@@ -8,10 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
 
+    public static final String phoneNumberRegex = "^[+]?[0-9]{10,13}$";
+    public static final String nameRegex = "[A-Z][a-z]{1,24}";
     private Button submitButton;
     private EditText firstName, lastName, email, phone, password, confirmPassword;
     private TextView errorList;
@@ -54,13 +54,12 @@ public class MainActivity extends AppCompatActivity {
             if (name.getText().length() > 25) {
                 if (name == firstName) {
                     name.setError("First name must be less than 25 chars");
-                    //listOfErrors.add("First name must be less than 25 characters\n");
                     listOfErrors += "First name must be less than 25 characters\n";
                 } else if (name == lastName) {
                     name.setError("Last name must be less than 25 chars");
                     listOfErrors += "Last name must be less than 25 characters\n";
                 }
-            } else if (!name.getText().toString().matches("[A-Z][a-z]{1,24}")) {
+            } else if (!name.getText().toString().matches(nameRegex)) {
                 if (name == firstName) {
                     name.setError("Please input a valid first name");
                     listOfErrors += "First name must start with an uppercase letter\n";
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void validatePhone(EditText phone){
-        if (!phone.getText().toString().matches("^[+]?[0-9]{10,13}$")) {
+        if (!phone.getText().toString().matches(phoneNumberRegex)) {
             phone.setError("Please input a valid phone number");
             listOfErrors += "Invalid phone number\n";
         }
