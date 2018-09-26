@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">Lab 3</string>
+    <!--MainActivity.xml strings-->
+    <string name="app_name">Lab 4</string>
+    <string name="storage">Storage</string>
     <string name="input_first_name">First name</string>
     <string name="input_last_name">Last name</string>
     <string name="email">Email</string>
@@ -7,4 +9,23 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="submit">Submit</string>
+    <!--MainActivity.java strings-->
+    <string name="error_name_length">First name must be less than 25 characters</string>
+    <string name="error_non_valid_name">Please input a valid first name</string>
+    <string name="error_lowercase_name">First name must start with an uppercase letter</string>
+    <string name="error_last_name_length">Last name must be less than 25 characters</string>
+    <string name="error_non_valid_last_name">Please input a valid last name</string>
+    <string name="error_lowercase_last_name">Last name must start with an uppercase letter</string>
+    <string name="error_non_valid_email">Please input a valid email</string>
+    <string name="error_invalid_email">Invalid email</string>
+    <string name="error_non_valid_phone">Please input a valid phone number</string>
+    <string name="error_invalid_phone">Invalid phone number</string>
+    <string name="error_enter_pass">Please enter a password</string>
+    <string name="error_empty_pass">Password must be not empty</string>
+    <string name="error_pass_length">Password must be greater than 8 characters</string>
+    <string name="error_empty_conf_pass">Password confirmation must be not empty</string>
+    <string name="error_pass_dont_match">Password must match</string>
+
+    <!--StorageActivity.xml strings-->
+    <string name="view_list">View List</string>
 </resources>
