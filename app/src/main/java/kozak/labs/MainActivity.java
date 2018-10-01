@@ -1,179 +1,59 @@
 package kozak.labs;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Patterns;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.util.Log;
+import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+
+import kozak.labs.Entity.Character;
+import kozak.labs.Entity.Characters;
+import kozak.labs.Retrofit.ApiClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String PHONE_NUMBER_REGEX = "^[+]?[0-9]{10,13}$";
-    private static final String NAME_REGEX = "[A-Z][a-z]{1,24}";
-    Button submitButton, viewListButton;
-    EditText firstName, lastName, email, phone, password, confirmPassword;
-    TextView errorList;
 
-
-    private int maxLength = 25;
-    private SharedPreferences preferences;
-
-    private StringBuilder listOfErrors = new StringBuilder();
-
-    private Boolean firstNameValidation, lastNameValidation, emailValidation, phoneValidation, passValidation, passError;
-
-    private ArrayList<String> recordsList = new ArrayList<>();
+    private StringBuilder listOfCharacters = new StringBuilder();
+    private ApiClient apiClient = new ApiClient();
+    private Call<Characters> call = apiClient.getApiService().getData();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        firstName = findViewById(R.id.first_name);
-        lastName = findViewById(R.id.last_name);
-        email = findViewById(R.id.email);
-        phone = findViewById(R.id.phone);
-        password = findViewById(R.id.password);
-        confirmPassword = findViewById(R.id.confirm_password);
+        makeCall();
+    }
 
-        errorList =  findViewById(R.id.error_list);
-        submitButton = findViewById(R.id.submitButton);
-        viewListButton = findViewById(R.id.viewListButton);
-
-        preferences = getSharedPreferences(Constants.preference, Context.MODE_PRIVATE);
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
+    void makeCall(){
+        call.enqueue(new Callback<Characters>() {
             @Override
-            public void onClick(View view) {
-                validate();
+            public void onResponse(Call<Characters> call, Response<Characters> response) {
+                Log.e( getString(R.string.TAG), getString(R.string.on_response)
+                        + response.toString());
+                listOfCharacters.delete(0, listOfCharacters.length());
+                List<Character> charactersList = response.body().getCharacters();
+                for(int i = 0; i<charactersList.size(); i++) {
+                    Log.e( getString(R.string.TAG),
+                            String.format("%s%s\n%s%s\n", getString(R.string.character_name),
+                                    charactersList.get(i).getName(),
+                                    getString(R.string.character_image_url),
+                                    charactersList.get(i).getImageUrl()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Characters> call, Throwable t) {
+                Log.e(getString(R.string.TAG), getString(R.string.on_failure) +
+                        t.getMessage());
+                Toast.makeText(MainActivity.this, getString(R.string.on_failure),
+                        Toast.LENGTH_SHORT).show();
             }
         });
-
-        viewListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, StorageActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-    void validate()
-    {
-        listOfErrors.delete(0, listOfErrors.length());
-        clearValidation();
-        validateFirstName(firstName);
-        validateLastName(lastName);
-        validateEmail(email);
-        validatePhone(phone);
-        validatePassword(password, confirmPassword);
-        errorList.setText(listOfErrors.toString());
-        if(getValidationStatus()) {
-            savePreferences();
-        }
-    }
-
-    void validateFirstName(EditText firstName) {
-        if (firstName.getText().length() > maxLength) {
-            firstName.setError(getString(R.string.error_name_length));
-            listOfErrors.append(String.format("%s\n", getString(R.string.error_name_length)));
-        } else if (!firstName.getText().toString().matches(NAME_REGEX)) {
-            firstName.setError(getString(R.string.error_non_valid_name));
-            listOfErrors.append(String.format("%s\n", getString(R.string.error_lowercase_name)));
-        } else {
-            firstNameValidation = true;
-        }
-    }
-
-    void validateLastName(EditText lastName) {
-        if (lastName.getText().length() > maxLength) {
-            lastName.setError(getString(R.string.error_last_name_length));
-            listOfErrors.append(String.format("%s\n", getString(R.string.error_last_name_length)));
-        } else if (!lastName.getText().toString().matches(NAME_REGEX)) {
-            lastName.setError(getString(R.string.error_non_valid_lname));
-            listOfErrors.append(String.format("%s\n", getString(R.string.error_lowercase_last_name)));
-        } else {
-            lastNameValidation = true;
-        }
-    }
-
-    void validateEmail(EditText email) {
-        if (!Patterns.EMAIL_ADDRESS.matcher(email.getText().toString()).matches()) {
-            email.setError(getString(R.string.error_non_valid_email));
-            listOfErrors.append(String.format("%s\n", getString(R.string.error_invalid_email)));
-        }
-        else {
-            emailValidation = true;
-        }
-    }
-
-    void validatePhone(EditText phone){
-        if (!phone.getText().toString().matches(PHONE_NUMBER_REGEX)) {
-            phone.setError(getString(R.string.error_non_valid_phone));
-            listOfErrors.append(String.format("%s\n", getString(R.string.error_invalid_phone)));
-        }
-        else {
-            phoneValidation = true;
-        }
-    }
-
-    void validatePassword(EditText password, EditText confirmPassword){
-        if (password.getText().toString().isEmpty()) {
-            password.setError(getString(R.string.error_enter_pass));
-            listOfErrors.append(String.format("%s\n", getString(R.string.error_empty_pass)));
-            passError = true;
-        } else if (password.getText().length() < 8) {
-            password.setError(getString(R.string.error_pass_length));
-            listOfErrors.append(String.format("%s\n", getString(R.string.error_pass_length)));
-            passError = true;
-        }
-
-        if(confirmPassword.getText().toString().isEmpty()) {
-            confirmPassword.setError(getString(R.string.error_empty_pass));
-            listOfErrors.append(String.format("%s\n", getString(R.string.error_empty_conf_pass)));
-            passError = true;
-        }
-
-        if(!password.getText().toString().equals(confirmPassword.getText().toString())) {
-            confirmPassword.setError(getString(R.string.error_pass_dont_match));
-            listOfErrors.append(String.format("%s\n", R.string.error_pass_dont_match));
-            passError = true;
-        }
-
-        if(!passError) {
-            passValidation = true;
-        }
-
-    }
-
-    void clearValidation(){
-        firstNameValidation = false;
-        lastNameValidation = false;
-        emailValidation = false;
-        phoneValidation = false;
-        passValidation = false;
-        passError = false;
-    }
-
-    boolean getValidationStatus() {
-        return firstNameValidation & lastNameValidation & emailValidation & phoneValidation & passValidation;
-    }
-
-    void savePreferences(){
-        recordsList.add(firstName.getText().toString() + "\n" + lastName.getText().toString() + "\n" + phone.getText().toString());
-        Set<String> recordsSet = new HashSet<>(recordsList);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putStringSet(Constants.preferenceRecord, recordsSet);
-        editor.apply();
     }
 }
