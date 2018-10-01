@@ -1,14 +1,11 @@
 package kozak.labs.Entity;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Character {
     @SerializedName("name")
-    @Expose
     private String name;
     @SerializedName("image_url")
-    @Expose
     private String imageUrl;
 
     public String getName() {

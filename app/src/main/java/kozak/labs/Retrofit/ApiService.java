@@ -6,6 +6,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface ApiService {
-    @GET("anime/20/characters_staff")
+    @GET("v3/anime/20/characters_staff")
     Call<Characters> getData();
 }

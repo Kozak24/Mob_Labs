@@ -9,11 +9,5 @@
     android:paddingRight="6dp"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/list_of_chars"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/char_list"/>
-
 
 </RelativeLayout>

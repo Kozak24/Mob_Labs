@@ -31,7 +31,12 @@ public class ValidationActivity extends AppCompatActivity {
 
     private StringBuilder listOfErrors = new StringBuilder();
 
-    private Boolean firstNameValidation, lastNameValidation, emailValidation, phoneValidation, passValidation, passError;
+    private Boolean firstNameValidation;
+    private Boolean lastNameValidation;
+    private Boolean emailValidation;
+    private Boolean phoneValidation;
+    private Boolean passValidation;
+    private Boolean passError;
 
     private ArrayList<String> recordsList = new ArrayList<>();
 
@@ -63,7 +68,8 @@ public class ValidationActivity extends AppCompatActivity {
         viewListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ValidationActivity.this, StorageActivity.class);
+                Intent intent = new Intent(ValidationActivity.this,
+                        StorageActivity.class);
                 startActivity(intent);
             }
         });
@@ -102,7 +108,8 @@ public class ValidationActivity extends AppCompatActivity {
             listOfErrors.append(String.format("%s\n", getString(R.string.error_last_name_length)));
         } else if (!lastName.getText().toString().matches(NAME_REGEX)) {
             lastName.setError(getString(R.string.error_non_valid_last_name));
-            listOfErrors.append(String.format("%s\n", getString(R.string.error_lowercase_last_name)));
+            listOfErrors.append(String.format("%s\n",
+                    getString(R.string.error_lowercase_last_name)));
         } else {
             lastNameValidation = true;
         }
@@ -177,5 +184,4 @@ public class ValidationActivity extends AppCompatActivity {
         editor.putStringSet(Constants.preferenceRecord, recordsSet);
         editor.apply();
     }
-
 }
