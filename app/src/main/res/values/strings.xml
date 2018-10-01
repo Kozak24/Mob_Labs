@@ -1,5 +1,7 @@
 <resources>
     <!--MainActivity.xml strings-->
+
+    <!--ValidationActivity.xml strings-->
     <string name="app_name">Lab 4</string>
     <string name="storage">Storage</string>
     <string name="input_first_name">First name</string>
@@ -9,7 +11,7 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="submit">Submit</string>
-    <!--MainActivity.java strings-->
+    <!--ValidationActiviy.java strings-->
     <string name="error_name_length">First name must be less than 25 characters</string>
     <string name="error_non_valid_name">Please input a valid first name</string>
     <string name="error_lowercase_name">First name must start with an uppercase letter</string>
@@ -28,4 +30,11 @@
 
     <!--StorageActivity.xml strings-->
     <string name="view_list">View List</string>
+
+    <!--layout_row_view.xml string-->
+    <string name="character_name">Character name</string>
+    <string name="successful_response">Succes</string>
+    <string name="unsuccessful_response">Error</string>
+    <string name="char_list">List of characters</string>
+
 </resources>

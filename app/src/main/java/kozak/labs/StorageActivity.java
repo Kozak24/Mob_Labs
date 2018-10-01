@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static kozak.labs.Constants.preferenceRecord;
+
 public class StorageActivity extends AppCompatActivity {
 
     ListView storageListView;
@@ -25,7 +27,7 @@ public class StorageActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences(Constants.preference, Context.MODE_PRIVATE);
 
-        recordsSet = preferences.getStringSet(Constants.preferenceRecord, null);
+        recordsSet = preferences.getStringSet(preferenceRecord, null);
         List<String> recordsList = new ArrayList<>(recordsSet);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
