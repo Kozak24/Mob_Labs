@@ -6,7 +6,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
     public static final String BASE_URL = "https://api.jikan.moe/";
-    //public static Retrofit retrofit;
 
     private static Retrofit getRetrofitInstance() {
         return new Retrofit.Builder()
