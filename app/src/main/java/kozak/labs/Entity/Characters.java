@@ -16,5 +16,4 @@ public class Characters {
     public void setCharacters(List<Character> characters) {
         this.characters = characters;
     }
-
 }

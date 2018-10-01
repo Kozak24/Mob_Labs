@@ -40,10 +40,10 @@ public class MainActivity extends AppCompatActivity {
                 List<Character> charactersList = response.body().getCharacters();
                 for(int i = 0; i<charactersList.size(); i++) {
                     Log.e( getString(R.string.TAG),
-                    getString(R.string.character_name) +
-                            charactersList.get(i).getName() + "\n" +
-                            getString(R.string.character_image_url) +
-                            charactersList.get(i).getImageUrl() + "\n");
+                            String.format("%s%s\n%s%s\n", getString(R.string.character_name),
+                                    charactersList.get(i).getName(),
+                                    getString(R.string.character_image_url),
+                                    charactersList.get(i).getImageUrl()));
                 }
             }
 
@@ -56,7 +56,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 }
