@@ -12,11 +12,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import butterknife.BindView;
+
 import static kozak.labs.Constants.preferenceRecord;
 
 public class StorageActivity extends AppCompatActivity {
 
+    @BindView(R.id.storageListView)
     ListView storageListView;
+
     SharedPreferences preferences;
     Set<String> recordsSet = new HashSet<>();
 
@@ -33,11 +37,7 @@ public class StorageActivity extends AppCompatActivity {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, recordsList);
 
-        storageListView = findViewById(R.id.storageListView);
-
         storageListView.setAdapter(arrayAdapter);
 
     }
-
-
 }
