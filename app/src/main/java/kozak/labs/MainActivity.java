@@ -55,23 +55,23 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    void makeCall(){
+    void makeCall() {
         call.clone().enqueue(new Callback<Characters>() {
             @Override
             public void onResponse(Call<Characters> call, Response<Characters> response) {
                 Log.e(TAG, getString(R.string.on_response)
                         + response.toString());
 
-                if(response.body().getCharacters() != null) {
+                if (response.body() != null) {
                     List<Character> charactersList = response.body().getCharacters();
 
-                    for(int i = 0; i < charactersList.size(); i++) {
+                    for (int i = 0; i < charactersList.size(); i++) {
                         mCharactersNames.add(charactersList.get(i).getName());
                         mCharactersImageUrls.add(charactersList.get(i).getImageUrl());
                     }
                     displayItems();
-                }
-                else {
+                } else {
+                    clearLists();
                     noData();
                 }
             }
@@ -80,25 +80,25 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<Characters> call, Throwable t) {
                 Toast.makeText(MainActivity.this, getString(R.string.on_failure),
                         Toast.LENGTH_SHORT).show();
-
+                clearLists();
                 noData();
             }
         });
     }
 
-    private void displayItems(){
+    private void displayItems() {
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mCharactersNames,
                 mCharactersImageUrls);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void clearLists(){
+    private void clearLists() {
         mCharactersImageUrls.clear();
         mCharactersNames.clear();
     }
 
-    private void noData(){
+    private void noData() {
         mCharactersNames.add(getString(R.string.no_data));
         mCharactersImageUrls.add(getString(R.string.no_data));
         displayItems();
