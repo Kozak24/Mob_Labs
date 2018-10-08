@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private Call<Characters> call = apiClient.getApiService().getData();
     private ArrayList<String> mCharactersImageUrls = new ArrayList<>();
     private ArrayList<String> mCharactersNames = new ArrayList<>();
+    private ArrayList<String> mCharactersRoles = new ArrayList<>();
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        noData();
+        makeCall();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < charactersList.size(); i++) {
                         mCharactersNames.add(charactersList.get(i).getName());
                         mCharactersImageUrls.add(charactersList.get(i).getImageUrl());
+                        mCharactersRoles.add(charactersList.get(i).getRole());
                     }
                     displayItems();
                 } else {
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayItems() {
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mCharactersNames,
-                mCharactersImageUrls);
+                mCharactersImageUrls, mCharactersRoles);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -96,11 +98,13 @@ public class MainActivity extends AppCompatActivity {
     private void clearLists() {
         mCharactersImageUrls.clear();
         mCharactersNames.clear();
+        mCharactersRoles.clear();
     }
 
     private void noData() {
         mCharactersNames.add(getString(R.string.no_data));
         mCharactersImageUrls.add(getString(R.string.no_data));
+        mCharactersRoles.add(getString(R.string.no_data));
         displayItems();
     }
 }
