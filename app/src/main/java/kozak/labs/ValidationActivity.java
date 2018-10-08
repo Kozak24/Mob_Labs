@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -18,12 +16,34 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
+
 public class ValidationActivity extends AppCompatActivity {
 
     private static final String PHONE_NUMBER_REGEX = "^[+]?[0-9]{10,13}$";
     private static final String NAME_REGEX = "[A-Z][a-z]{1,24}";
-    Button submitButton, viewListButton;
-    EditText firstName, lastName, email, phone, password, confirmPassword;
+
+    @BindView(R.id.submitButton)
+    Button submitButton;
+    @BindView(R.id.viewListButton)
+    Button viewListButton;
+
+    @BindView(R.id.first_name)
+    EditText firstName;
+    @BindView(R.id.last_name)
+    EditText lastName ;
+    @BindView(R.id.email)
+    EditText email;
+    @BindView(R.id.phone)
+    EditText phone;
+    @BindView(R.id.password)
+    EditText password;
+    @BindView(R.id.confirm_password)
+    EditText confirmPassword;
+    @BindView(R.id.error_list)
     TextView errorList;
 
     private int maxLength = 25;
@@ -45,36 +65,12 @@ public class ValidationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validation);
 
-        firstName = findViewById(R.id.first_name);
-        lastName = findViewById(R.id.last_name);
-        email = findViewById(R.id.email);
-        phone = findViewById(R.id.phone);
-        password = findViewById(R.id.password);
-        confirmPassword = findViewById(R.id.confirm_password);
-
-        errorList =  findViewById(R.id.error_list);
-        submitButton = findViewById(R.id.submitButton);
-        viewListButton = findViewById(R.id.viewListButton);
+        ButterKnife.bind(this);
 
         preferences = getSharedPreferences(Constants.preference, Context.MODE_PRIVATE);
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                validate();
-            }
-        });
-
-        viewListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ValidationActivity.this,
-                        StorageActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
+    @OnClick(R.id.submitButton)
     void validate()
     {
         listOfErrors.delete(0, listOfErrors.length());
@@ -88,6 +84,13 @@ public class ValidationActivity extends AppCompatActivity {
         if(getValidationStatus()) {
             savePreferences();
         }
+    }
+
+    @OnClick(R.id.viewListButton)
+    void changeActivity(){
+        Intent intent = new Intent(ValidationActivity.this,
+                StorageActivity.class);
+        startActivity(intent);
     }
 
     void validateFirstName(EditText firstName) {

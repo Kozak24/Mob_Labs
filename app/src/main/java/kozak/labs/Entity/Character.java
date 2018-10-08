@@ -7,6 +7,8 @@ public class Character {
     private String name;
     @SerializedName("image_url")
     private String imageUrl;
+    @SerializedName("role")
+    private String role;
 
     public String getName() {
         return name;
@@ -23,4 +25,8 @@ public class Character {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public String getRole() { return role; }
+
+    public void setRole(String role) { this.role = role; }
 }
