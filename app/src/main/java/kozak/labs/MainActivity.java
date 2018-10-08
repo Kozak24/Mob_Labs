@@ -6,9 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,14 +29,16 @@ public class MainActivity extends AppCompatActivity {
 
     private ApiClient apiClient = new ApiClient();
     private Call<Characters> call = apiClient.getApiService().getData();
-    private ArrayList<String> mCharactersImageUrls = new ArrayList<>();
-    private ArrayList<String> mCharactersNames = new ArrayList<>();
-    private ArrayList<String> mCharactersRoles = new ArrayList<>();
+    private List<Character> charactersList;
+
+    private RecyclerViewAdapter adapter = new RecyclerViewAdapter(this);
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.pull_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.no_data)
+    TextView noDataTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +46,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+        initRecyclerView();
 
         makeCall();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                clearLists();
                 makeCall();
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -64,16 +67,9 @@ public class MainActivity extends AppCompatActivity {
                         + response.toString());
 
                 if (response.body() != null) {
-                    List<Character> charactersList = response.body().getCharacters();
-
-                    for (int i = 0; i < charactersList.size(); i++) {
-                        mCharactersNames.add(charactersList.get(i).getName());
-                        mCharactersImageUrls.add(charactersList.get(i).getImageUrl());
-                        mCharactersRoles.add(charactersList.get(i).getRole());
-                    }
+                    charactersList = response.body().getCharacters();
                     displayItems();
                 } else {
-                    clearLists();
                     noData();
                 }
             }
@@ -82,29 +78,26 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<Characters> call, Throwable t) {
                 Toast.makeText(MainActivity.this, getString(R.string.on_failure),
                         Toast.LENGTH_SHORT).show();
-                clearLists();
                 noData();
             }
         });
     }
 
-    private void displayItems() {
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mCharactersNames,
-                mCharactersImageUrls, mCharactersRoles);
-        recyclerView.setAdapter(adapter);
+    private void initRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        noDataTextView.setVisibility(View.INVISIBLE);
     }
 
-    private void clearLists() {
-        mCharactersImageUrls.clear();
-        mCharactersNames.clear();
-        mCharactersRoles.clear();
+    private void displayItems() {
+        adapter.setItems(charactersList);
+        adapter.notifyDataSetChanged();
+        noDataTextView.setVisibility(View.INVISIBLE);
     }
 
     private void noData() {
-        mCharactersNames.add(getString(R.string.no_data));
-        mCharactersImageUrls.add(getString(R.string.no_data));
-        mCharactersRoles.add(getString(R.string.no_data));
-        displayItems();
+        adapter.setItems(null);
+        adapter.notifyDataSetChanged();
+        noDataTextView.setVisibility(View.VISIBLE);
     }
 }

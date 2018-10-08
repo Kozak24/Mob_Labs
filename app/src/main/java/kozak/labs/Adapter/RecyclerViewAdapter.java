@@ -14,26 +14,24 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import kozak.labs.Entity.Character;
 import kozak.labs.R;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
-    
-    private ArrayList<String> mCharacterNames;
-    private ArrayList<String> mCharacterImages;
-    private ArrayList<String> mCharactersRoles;
+
+    private List<Character> mCharactersInfo;
     private Context mContext;
 
-    public RecyclerViewAdapter(Context mContext, ArrayList<String> mCharacterNames,
-                               ArrayList<String> mCharacterImages,
-                               ArrayList<String> mCharactersRoles){
+    public RecyclerViewAdapter(Context mContext){
         this.mContext = mContext;
-        this.mCharacterNames = mCharacterNames;
-        this.mCharacterImages = mCharacterImages;
-        this.mCharactersRoles = mCharactersRoles;
+    }
+
+    public void setItems(List<Character> mCharactersInfo){
+        this.mCharactersInfo = mCharactersInfo;
     }
 
     @NonNull
@@ -47,16 +45,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-
         Glide.with(mContext);
 
-        Picasso.get().load(mCharacterImages.get(position)).into(viewHolder.characterImage);
+        final Character characters = mCharactersInfo.get(position);
 
-        viewHolder.characterName.setText(mCharacterNames.get(position));
+        Picasso.get().load(characters.getImageUrl()).into(viewHolder.characterImage);
 
-        viewHolder.characterRole.setText(mCharactersRoles.get(position));
-        
-        if(mCharactersRoles.get(position).equals(mContext.getString(R.string.role_main))) {
+        viewHolder.characterName.setText(characters.getName());
+        viewHolder.characterRole.setText(characters.getRole());
+
+        if(characters.getRole().equals(mContext.getString(R.string.role_main))) {
             viewHolder.characterName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             viewHolder.characterRole.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         } else {
@@ -66,7 +64,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return mCharacterImages.size();
+        if(mCharactersInfo != null) {
+            return mCharactersInfo.size();
+        } else {
+            return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -83,7 +85,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             super(itemView);
 
             ButterKnife.bind(this, itemView);
-
         }
     }
 }

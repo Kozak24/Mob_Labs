@@ -9,16 +9,27 @@
     android:paddingRight="6dp"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/no_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="101dp"
+        android:gravity="center"
+        android:textSize="40sp"
+        android:text="@string/no_data" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/pull_refresh"
-        android:layout_width="match_parent"
+        android:layout_width="368dp"
         android:layout_height="wrap_content">
 
-        <view class="android.support.v7.widget.RecyclerView"
+        <view
             android:id="@+id/recycler_view"
+            class="android.support.v7.widget.RecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </view>
+            android:layout_height="match_parent" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>
