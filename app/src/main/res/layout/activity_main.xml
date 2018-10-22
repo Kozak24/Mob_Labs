@@ -5,31 +5,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingBottom="6dp"
-    android:paddingLeft="6dp"
-    android:paddingRight="6dp"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/no_data"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="101dp"
-        android:gravity="center"
-        android:textSize="40sp"
-        android:text="@string/no_data" />
+        android:background="@color/colorPrimary">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/pull_refresh"
-        android:layout_width="368dp"
-        android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/go_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_favorite_black_24dp"/>
 
-        <view
-            android:id="@+id/recycler_view"
-            class="android.support.v7.widget.RecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    </android.support.v7.widget.Toolbar>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    <FrameLayout
+        android:layout_below="@+id/toolbar"
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
 </RelativeLayout>
