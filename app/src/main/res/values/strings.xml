@@ -49,4 +49,6 @@
     <string name="mal_id">Mal ID</string>
     <string name="language">Language</string>
     <string name="actor_name">Actor name</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_favorites">Favorites</string>
 </resources>

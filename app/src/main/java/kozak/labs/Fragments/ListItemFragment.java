@@ -27,22 +27,23 @@ import kozak.labs.R;
 public class ListItemFragment extends Fragment {
 
     private DetailsRecyclerAdapter adapter;
-    boolean isImageFitToScreen;
+    private boolean isImageFitToScreen;
     private SharedPreferences preferences;
 
-    Character character;
+    private Character character;
+
     @BindView(R.id.detail_char_name)
-    TextView characterName;
+    protected TextView characterName;
     @BindView(R.id.detail_char_image)
-    ImageView characterImage;
+    protected ImageView characterImage;
     @BindView(R.id.detail_char_role)
-    TextView characterRole;
+    protected TextView characterRole;
     @BindView(R.id.detail_char_id)
-    TextView characterID;
+    protected TextView characterID;
     @BindView(R.id.detail_recycler_view)
-    RecyclerView recyclerView;
+    protected RecyclerView recyclerView;
     @BindView(R.id.favorite)
-    ImageView favorite;
+    protected ImageView favorite;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +58,8 @@ public class ListItemFragment extends Fragment {
         if (getActivity() != null) {
             ButterKnife.bind(this, view);
 
-            preferences = getActivity().getSharedPreferences(Constants.preference, Context.MODE_PRIVATE);
+            preferences = getActivity().getSharedPreferences(Constants.favorites,
+                    Context.MODE_PRIVATE);
             initRecyclerView();
             displayItems();
         }
@@ -88,7 +90,6 @@ public class ListItemFragment extends Fragment {
     void setFavorite() {
         SharedPreferences.Editor prefEditor = preferences.edit();
         if(checkFavorite()) {
-            Gson gson = new Gson();
             prefEditor.remove(character.getName());
             prefEditor.apply();
         } else {
@@ -125,7 +126,7 @@ public class ListItemFragment extends Fragment {
     }
 
     private void initRecyclerView() {
-        adapter = new DetailsRecyclerAdapter(getContext());
+        adapter = new DetailsRecyclerAdapter();
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,18 +24,32 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import kozak.labs.Constants;
 import kozak.labs.Entity.Character;
+import kozak.labs.Fragments.ListFragment;
 import kozak.labs.Fragments.ListItemFragment;
+import kozak.labs.MainActivity;
+import kozak.labs.Adapter.OnCharacterClickListener;
 import kozak.labs.R;
+
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
     private List<Character> mCharactersInfo;
     private Context mContext;
     private FragmentManager fragmentManager;
+    private OnCharacterClickListener listener;
 
-    public RecyclerViewAdapter(Context mContext, FragmentManager fragmentManager){
-        this.mContext = mContext;
+    /*
+    public RecyclerViewAdapter(FragmentManager fragmentManager){
         this.fragmentManager = fragmentManager;
+    }*/
+
+    /*
+    public RecyclerViewAdapter(){
+
+    }*/
+
+    public void setOnCharacterClickListener(OnCharacterClickListener listener) {
+        this.listener = listener;
     }
 
     public void setItems(List<Character> mCharactersInfo){
@@ -46,6 +61,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.layout_row_view, viewGroup, false);
+        mContext = viewGroup.getContext();
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -53,7 +69,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Glide.with(mContext);
-
 
         final Character characters = mCharactersInfo.get(position);
 
@@ -70,42 +85,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               Toast.makeText(mContext, characters.getName(), Toast.LENGTH_SHORT).show();
-
-               Bundle bundle = new Bundle();
-               bundle.putSerializable(Constants.ARG_TITLE, characters);
-
-               ListItemFragment listItemFragment = new ListItemFragment();
-               listItemFragment.setArguments(bundle);
-
-               fragmentManager.beginTransaction()
-                       .replace(R.id.fragment_container, listItemFragment)
-                       .addToBackStack(null)
-                       .commit();
-           }
+            @Override
+            public void onClick(View view) {
+                listener.onCharacterClick(characters);
+            }
         });
     }
 
     @Override
     public int getItemCount() {
-        if(mCharactersInfo != null) {
-            return mCharactersInfo.size();
-        } else {
-            return 0;
-        }
+        return mCharactersInfo == null ? 0 : mCharactersInfo.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.char_image)
-        ImageView characterImage;
+        protected ImageView characterImage;
         @BindView(R.id.char_name)
-        TextView characterName;
+        protected TextView characterName;
         @BindView(R.id.char_role)
-        TextView characterRole;
+        protected TextView characterRole;
         @BindView(R.id.parent_layout)
-        ConstraintLayout parentLayout;
+        protected ConstraintLayout parentLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);

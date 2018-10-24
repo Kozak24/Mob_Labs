@@ -18,23 +18,20 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import kozak.labs.Adapter.OnCharacterClickListener;
+import kozak.labs.Adapter.RecyclerViewAdapter;
 import kozak.labs.Entity.Character;
-import kozak.labs.Adapter.FavoritesAdapter;
 import kozak.labs.Constants;
+import kozak.labs.MainActivity;
 import kozak.labs.R;
 
 public class FavoritesFragment extends Fragment {
 
-    private FavoritesAdapter adapter;
+    private RecyclerViewAdapter adapter;
     private List<Character> charactersList;
+
     @BindView(R.id.favorite_recycler_view)
-    RecyclerView recyclerView;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
+    protected RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,7 +68,22 @@ public class FavoritesFragment extends Fragment {
 
     private void initRecyclerView() {
         charactersList = new ArrayList<>();
-        adapter = new FavoritesAdapter(getContext());
+        adapter = new RecyclerViewAdapter();
+        adapter.setOnCharacterClickListener( new OnCharacterClickListener() {
+            @Override
+            public void onCharacterClick(Character character) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                if(mainActivity != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable( Constants.ARG_TITLE, character);
+
+                    ListItemFragment listItemFragment = new ListItemFragment();
+                    listItemFragment.setArguments(bundle);
+
+                    mainActivity.setFragment(listItemFragment);
+                }
+            }
+        });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }

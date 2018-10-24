@@ -3,7 +3,6 @@ package kozak.labs.Fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,9 +17,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import kozak.labs.Adapter.OnCharacterClickListener;
 import kozak.labs.Adapter.RecyclerViewAdapter;
+import kozak.labs.Constants;
 import kozak.labs.Entity.Character;
 import kozak.labs.Entity.Characters;
+import kozak.labs.MainActivity;
 import kozak.labs.R;
 import kozak.labs.Retrofit.ApiClient;
 import retrofit2.Call;
@@ -33,16 +35,14 @@ public class ListFragment extends Fragment {
     private Call<Characters> call = apiClient.getApiService().getData();
     private List<Character> charactersList;
 
-    private FragmentManager fragmentManager;
-
     private RecyclerViewAdapter adapter;
 
     @BindView(R.id.recycler_view)
-    RecyclerView recyclerView;
+    protected RecyclerView recyclerView;
     @BindView(R.id.pull_refresh)
-    SwipeRefreshLayout swipeRefreshLayout;
+    protected SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.no_data)
-    TextView noDataTextView;
+    protected TextView noDataTextView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -50,7 +50,6 @@ public class ListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         if (getActivity() != null) {
             ButterKnife.bind(this, view);
-            fragmentManager = getFragmentManager();
             initRecyclerView();
 
             noDataTextView.setVisibility(View.INVISIBLE);
@@ -94,7 +93,22 @@ public class ListFragment extends Fragment {
     }
 
     private void initRecyclerView() {
-        adapter = new RecyclerViewAdapter(getContext(), fragmentManager);
+        adapter = new RecyclerViewAdapter();
+        adapter.setOnCharacterClickListener( new OnCharacterClickListener() {
+            @Override
+            public void onCharacterClick(Character character) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                if(mainActivity != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable( Constants.ARG_TITLE, character);
+
+                    ListItemFragment listItemFragment = new ListItemFragment();
+                    listItemFragment.setArguments(bundle);
+
+                    mainActivity.setFragment(listItemFragment);
+                }
+            }
+        });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
