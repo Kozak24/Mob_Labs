@@ -164,7 +164,6 @@ public class ValidationActivity extends AppCompatActivity {
         if(!passError) {
             passValidation = true;
         }
-
     }
 
     void clearValidation(){
