@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     protected FrameLayout frameLayout;
     @BindView(R.id.navigation_menu)
     protected BottomNavigationView bottomNavigation;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

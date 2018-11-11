@@ -15,21 +15,11 @@ public class VoiceActor {
         return language;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
     public String getActorName() {
         return actorName;
-    }
-
-    public void setActorName(String actorName) {
-        this.actorName = actorName;
     }
 
     public String getActorImageUrl() {
         return actorImageUrl;
     }
-
-    public void setActorImageUrl(String actorImageUrl) { this.actorImageUrl = actorImageUrl; }
 }

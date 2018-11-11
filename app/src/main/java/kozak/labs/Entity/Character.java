@@ -17,35 +17,17 @@ public class Character implements Serializable {
     @SerializedName("voice_actors")
     private List<VoiceActor> voiceActors;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getName() { return name; }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public String getRole() { return role; }
-
-    public void setRole(String role) { this.role = role; }
 
     public String getMalID() { return malID; }
 
-    public void setMalID(String malID) { this.malID = malID; }
-
     public List<VoiceActor> getVoiceActors() {
         return voiceActors;
-    }
-
-    public void setVoiceActors(List<VoiceActor> voiceActors) {
-        this.voiceActors = voiceActors;
     }
 }

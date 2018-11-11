@@ -31,8 +31,6 @@ import retrofit2.Response;
 
 public class ListFragment extends Fragment {
 
-    private ApiClient apiClient = new ApiClient();
-    private Call<Characters> call = apiClient.getApiService().getData();
     private List<Character> charactersList;
 
     private RecyclerViewAdapter adapter;
@@ -67,7 +65,7 @@ public class ListFragment extends Fragment {
     }
 
     void makeCall() {
-        call.clone().enqueue(new Callback<Characters>() {
+        ApiClient.getApiService().getData().clone().enqueue(new Callback<Characters>() {
             @Override
             public void onResponse(Call<Characters> call, Response<Characters> response) {
                 if (getActivity() != null) {
