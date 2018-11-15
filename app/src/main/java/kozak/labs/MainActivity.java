@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        ApplicationEx.setContext(getApplicationContext());
+
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
 
         setFragment(new ListFragment());

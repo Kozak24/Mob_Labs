@@ -20,17 +20,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import kozak.labs.Adapter.DetailsRecyclerAdapter;
+import kozak.labs.ApplicationEx;
 import kozak.labs.Constants;
 import kozak.labs.Entity.Character;
+import kozak.labs.MVPInterfaces.ListItemFragmentContract;
+import kozak.labs.Presenter.ListItemPresenter;
 import kozak.labs.R;
 
-public class ListItemFragment extends Fragment {
+public class ListItemFragment extends Fragment implements ListItemFragmentContract.View {
 
     private DetailsRecyclerAdapter adapter;
     private boolean isImageFitToScreen;
     private SharedPreferences preferences;
 
     private Character character;
+
+    private ListItemFragmentContract.Presenter mPresenter;
 
     @BindView(R.id.detail_char_name)
     protected TextView characterName;
@@ -52,6 +57,7 @@ public class ListItemFragment extends Fragment {
         ButterKnife.bind(this, view);
         if(getArguments() != null) {
             character = (Character) getArguments().getSerializable(Constants.ARG_TITLE);
+            ApplicationEx.setCharacter(character);
             displayCharacter();
         }
 
@@ -64,7 +70,8 @@ public class ListItemFragment extends Fragment {
             displayItems();
         }
 
-        checkFavorite();
+        mPresenter = new ListItemPresenter(this);
+        mPresenter.isFavorite();
 
         return view;
     }
@@ -77,7 +84,7 @@ public class ListItemFragment extends Fragment {
                     ConstraintLayout.LayoutParams.WRAP_CONTENT,
                     ConstraintLayout.LayoutParams.WRAP_CONTENT));
             characterImage.setAdjustViewBounds(true);
-        }else{
+        } else {
             isImageFitToScreen=true;
             characterImage.setLayoutParams(new ConstraintLayout.LayoutParams(
                     ConstraintLayout.LayoutParams.MATCH_PARENT,
@@ -87,27 +94,16 @@ public class ListItemFragment extends Fragment {
     }
 
     @OnClick(R.id.favorite)
-    void setFavorite() {
-        SharedPreferences.Editor prefEditor = preferences.edit();
-        if(checkFavorite()) {
-            prefEditor.remove(character.getName());
-            prefEditor.apply();
-        } else {
-            Gson gson = new Gson();
-            String json = gson.toJson(character);
-            prefEditor.putString(character.getName(), json);
-            prefEditor.apply();
-        }
-        checkFavorite();
+    public void onFavoritesClicked() {
+        mPresenter.makeFavorite();
     }
 
-    boolean checkFavorite() {
-        if(!preferences.contains(character.getName())) {
-            favorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-            return false;
-        } else {
+    @Override
+    public void setFavoriteImage(boolean isFavorite) {
+        if(isFavorite) {
             favorite.setImageResource(R.drawable.ic_favorite_black_24dp);
-            return true;
+        } else {
+            favorite.setImageResource( R.drawable.ic_favorite_border_black_24dp);
         }
     }
 
