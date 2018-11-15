@@ -22,13 +22,16 @@ import kozak.labs.Adapter.OnCharacterClickListener;
 import kozak.labs.Adapter.RecyclerViewAdapter;
 import kozak.labs.Entity.Character;
 import kozak.labs.Constants;
+import kozak.labs.MVPInterfaces.FavoritesFragmentContract;
 import kozak.labs.MainActivity;
+import kozak.labs.Presenter.FavoritesPresenter;
 import kozak.labs.R;
 
-public class FavoritesFragment extends Fragment {
+public class FavoritesFragment extends Fragment implements FavoritesFragmentContract.View {
 
     private RecyclerViewAdapter adapter;
-    private List<Character> charactersList;
+
+    private FavoritesFragmentContract.Presenter mPresenter;
 
     @BindView(R.id.favorite_recycler_view)
     protected RecyclerView recyclerView;
@@ -39,35 +42,18 @@ public class FavoritesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
         ButterKnife.bind(this, view);
-        charactersList = null;
 
         if(getActivity() != null) {
             initRecyclerView();
-
-            getPreferences();
         }
+
+        mPresenter = new FavoritesPresenter(this);
+        mPresenter.loadData();
 
         return view;
     }
 
-    private void getPreferences() {
-        SharedPreferences preferences;
-        preferences = getActivity().getSharedPreferences(
-                Constants.favorites, Context.MODE_PRIVATE);
-        Map<String, ?> map = preferences.getAll();
-        if(map != null) {
-            for (Map.Entry<String, ?> entry : map.entrySet()) {
-                final Character character;
-                character = new Gson().
-                        fromJson(entry.getValue().toString(), Character.class);
-                charactersList.add(character);
-            }
-            displayItems();
-        }
-    }
-
     private void initRecyclerView() {
-        charactersList = new ArrayList<>();
         adapter = new RecyclerViewAdapter();
         adapter.setOnCharacterClickListener( new OnCharacterClickListener() {
             @Override
@@ -88,7 +74,8 @@ public class FavoritesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void displayItems() {
+    @Override
+    public void displayItems(List<Character> charactersList) {
         adapter.setItems(charactersList);
         adapter.notifyDataSetChanged();
     }
