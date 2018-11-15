@@ -10,11 +10,13 @@ import android.widget.FrameLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import kozak.labs.FragmentNavigation.FragmentNavigation;
 import kozak.labs.Fragments.FavoritesFragment;
 import kozak.labs.Fragments.ListFragment;
 
 
 public class MainActivity extends AppCompatActivity {
+    FragmentNavigation fragmentNavigation;
 
     @BindView(R.id.fragment_container)
     protected FrameLayout frameLayout;
@@ -32,7 +34,10 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
 
-        setFragment(new ListFragment());
+        fragmentNavigation = new FragmentNavigation(getSupportFragmentManager());
+        fragmentNavigation.setFragment(new ListFragment());
+        ApplicationEx.setFragmentNavigation(fragmentNavigation);
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener =
@@ -49,15 +54,8 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new FavoritesFragment();
                             break;
                     }
-                    setFragment(selectedFragment);
+                    fragmentNavigation.setFragment(selectedFragment);
                     return true;
                 }
             };
-
-    public void setFragment(final Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
-    }
 }

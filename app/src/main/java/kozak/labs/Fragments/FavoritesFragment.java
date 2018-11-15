@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import kozak.labs.Adapter.OnCharacterClickListener;
 import kozak.labs.Adapter.RecyclerViewAdapter;
+import kozak.labs.ApplicationEx;
 import kozak.labs.Entity.Character;
 import kozak.labs.Constants;
 import kozak.labs.MVPInterfaces.FavoritesFragmentContract;
@@ -66,7 +67,7 @@ public class FavoritesFragment extends Fragment implements FavoritesFragmentCont
                     ListItemFragment listItemFragment = new ListItemFragment();
                     listItemFragment.setArguments(bundle);
 
-                    mainActivity.setFragment(listItemFragment);
+                    ApplicationEx.getFragmentNavigation().setFragment(listItemFragment);
                 }
             }
         });
