@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -23,11 +22,11 @@ import kozak.labs.Adapter.DetailsRecyclerAdapter;
 import kozak.labs.ApplicationEx;
 import kozak.labs.Constants;
 import kozak.labs.Entity.Character;
-import kozak.labs.MVPInterfaces.ListItemFragmentContract;
-import kozak.labs.Presenter.ListItemPresenter;
+import kozak.labs.MVPInterfaces.CharacterDetailsContract;
+import kozak.labs.Presenter.DetailsPresenter;
 import kozak.labs.R;
 
-public class ListItemFragment extends Fragment implements ListItemFragmentContract.View {
+public class DetailsFragment extends Fragment implements CharacterDetailsContract.View {
 
     private DetailsRecyclerAdapter adapter;
     private boolean isImageFitToScreen;
@@ -35,7 +34,7 @@ public class ListItemFragment extends Fragment implements ListItemFragmentContra
 
     private Character character;
 
-    private ListItemFragmentContract.Presenter mPresenter;
+    private DetailsPresenter mPresenter;
 
     @BindView(R.id.detail_char_name)
     protected TextView characterName;
@@ -58,22 +57,27 @@ public class ListItemFragment extends Fragment implements ListItemFragmentContra
         if(getArguments() != null) {
             character = (Character) getArguments().getSerializable(Constants.ARG_TITLE);
             ApplicationEx.setCharacter(character);
-            displayCharacter();
         }
 
         if (getActivity() != null) {
             ButterKnife.bind(this, view);
 
-            preferences = getActivity().getSharedPreferences(Constants.favorites,
+            preferences = getActivity().getSharedPreferences(Constants.FAVORITES,
                     Context.MODE_PRIVATE);
             initRecyclerView();
             displayItems();
         }
 
-        mPresenter = new ListItemPresenter(this);
-        mPresenter.isFavorite();
+        mPresenter = new DetailsPresenter();
+        mPresenter.attachView(this);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.onResume();
     }
 
     @OnClick(R.id.detail_char_image)
@@ -99,21 +103,19 @@ public class ListItemFragment extends Fragment implements ListItemFragmentContra
     }
 
     @Override
-    public void setFavoriteImage(boolean isFavorite) {
-        if(isFavorite) {
-            favorite.setImageResource(R.drawable.ic_favorite_black_24dp);
-        } else {
-            favorite.setImageResource( R.drawable.ic_favorite_border_black_24dp);
-        }
-    }
-
-    void displayCharacter() {
+    public void displayCharacter(final Character character, final boolean isFavorite) {
         characterName.setText(character.getName());
         Picasso.get().load(character.getImageUrl()).into(characterImage);
         characterRole.setText(String.format("%s: %s", getString(R.string.char_role),
                 character.getRole()));
         characterID.setText(String.format("%s: %s", getString(R.string.mal_id),
                 character.getMalID()));
+
+        if(isFavorite) {
+            favorite.setImageResource(R.drawable.ic_favorite_black_24dp);
+        } else {
+            favorite.setImageResource( R.drawable.ic_favorite_border_black_24dp);
+        }
     }
 
     private void displayItems() {
@@ -125,5 +127,11 @@ public class ListItemFragment extends Fragment implements ListItemFragmentContra
         adapter = new DetailsRecyclerAdapter();
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
     }
 }

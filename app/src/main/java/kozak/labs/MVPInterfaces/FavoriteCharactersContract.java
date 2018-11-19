@@ -4,18 +4,16 @@ import java.util.List;
 
 import kozak.labs.Entity.Character;
 
-public interface ListFragmentContract {
+public interface FavoriteCharactersContract {
     interface View {
-        void noData();
-        void displayItems(List<Character> characterList);
+        void displayFavoritesCharacters(final List<Character> characterList);
     }
 
     interface Presenter {
-        void onDetachView();
         void loadData();
     }
 
     interface Model {
-        List<Character> makeCall();
+        List<Character> getFavoriteCharacters();
     }
 }

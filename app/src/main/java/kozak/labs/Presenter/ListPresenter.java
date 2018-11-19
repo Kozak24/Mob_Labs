@@ -3,31 +3,39 @@ package kozak.labs.Presenter;
 import java.util.List;
 
 import kozak.labs.Entity.Character;
-import kozak.labs.MVPInterfaces.ListFragmentContract;
+import kozak.labs.MVPInterfaces.CharactersListContract;
 import kozak.labs.Model.ListModel;
 
-public class ListPresenter implements ListFragmentContract.Presenter {
-    private ListFragmentContract.View mView;
-    private ListFragmentContract.Model mModel;
-    private List<Character> characterList;
+public class ListPresenter extends BasePresenter<CharactersListContract.View>
+        implements CharactersListContract.Presenter {
+    private CharactersListContract.Model mModel;
 
-    public ListPresenter(ListFragmentContract.View mView) {
-        this.mView = mView;
+    public ListPresenter() {
         this.mModel = new ListModel();
     }
 
     @Override
     public void loadData() {
-        characterList = mModel.makeCall();
+        List<Character> characterList = mModel.getCharactersList();
         if(characterList == null) {
             mView.noData();
         } else {
-            mView.displayItems(characterList);
+            mView.displayCharacters(characterList);
         }
     }
 
     @Override
-    public void onDetachView() {
-        mView = null;
+    public void attachView(CharactersListContract.View view) {
+        super.attachView( view );
+    }
+
+    @Override
+    public void detachView() {
+        super.detachView();
+    }
+
+    @Override
+    public void onResume() {
+        loadData();
     }
 }

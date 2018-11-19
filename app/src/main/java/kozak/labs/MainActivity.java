@@ -30,14 +30,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        ApplicationEx.setContext(getApplicationContext());
-
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
 
         fragmentNavigation = new FragmentNavigation(getSupportFragmentManager());
-        fragmentNavigation.setFragment(new ListFragment());
         ApplicationEx.setFragmentNavigation(fragmentNavigation);
-
+        fragmentNavigation.setFragment(new ListFragment(), false);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener =
@@ -54,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new FavoritesFragment();
                             break;
                     }
-                    fragmentNavigation.setFragment(selectedFragment);
+                    fragmentNavigation.setFragment(selectedFragment, false);
                     return true;
                 }
             };

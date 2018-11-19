@@ -1,13 +1,14 @@
 package kozak.labs.MVPInterfaces;
 
-public interface ListItemFragmentContract {
+import kozak.labs.Entity.Character;
+
+public interface CharacterDetailsContract {
     interface View {
-        void setFavoriteImage(boolean isFavorite);
+        void displayCharacter(final Character character, final boolean isFavorite);
     }
 
     interface Presenter {
         void makeFavorite();
-        void isFavorite();
     }
 
     interface Model {

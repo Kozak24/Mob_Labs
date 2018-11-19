@@ -1,8 +1,10 @@
 package kozak.labs;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 
 import kozak.labs.Entity.Character;
 import kozak.labs.FragmentNavigation.FragmentNavigation;
@@ -25,10 +27,6 @@ public class ApplicationEx extends Application {
         return mContext;
     }
 
-    public static void setContext(Context Context) {
-        mContext = Context;
-    }
-
     public static Character getCharacter() {
         return mCharacter;
     }
@@ -37,10 +35,11 @@ public class ApplicationEx extends Application {
         mCharacter = character;
     }
 
-
-
     @Override
     public void onCreate() {
         super.onCreate();
+        mContext = getApplicationContext();
+        /*mFragmentNavigation = new FragmentNavigation(
+                ((MainActivity) mContext).getSupportFragmentManager());*/
     }
 }

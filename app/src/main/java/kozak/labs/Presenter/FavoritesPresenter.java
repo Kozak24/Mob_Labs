@@ -3,23 +3,36 @@ package kozak.labs.Presenter;
 import java.util.List;
 
 import kozak.labs.Entity.Character;
-import kozak.labs.Fragments.FavoritesFragment;
-import kozak.labs.MVPInterfaces.FavoritesFragmentContract;
+import kozak.labs.MVPInterfaces.FavoriteCharactersContract;
 import kozak.labs.Model.FavoritesModel;
 
-public class FavoritesPresenter implements FavoritesFragmentContract.Presenter {
+public class FavoritesPresenter extends BasePresenter<FavoriteCharactersContract.View>
+        implements FavoriteCharactersContract.Presenter {
 
-    FavoritesFragmentContract.View mView;
-    FavoritesFragmentContract.Model mModel;
+    FavoriteCharactersContract.Model mModel;
 
-    public FavoritesPresenter(FavoritesFragmentContract.View mView) {
-        this.mView = mView;
+    public FavoritesPresenter() {
         mModel = new FavoritesModel();
     }
 
     @Override
     public void loadData() {
-        List<Character> characterList = mModel.getPreferences();
-        mView.displayItems(characterList);
+        List<Character> characterList = mModel.getFavoriteCharacters();
+        mView.displayFavoritesCharacters(characterList);
+    }
+
+    @Override
+    public void attachView(FavoriteCharactersContract.View view) {
+        super.attachView( view );
+    }
+
+    @Override
+    public void detachView() {
+        super.detachView();
+    }
+
+    @Override
+    public void onResume() {
+        loadData();
     }
 }

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,7 +17,6 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 public class ValidationActivity extends AppCompatActivity {
@@ -67,7 +65,7 @@ public class ValidationActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        preferences = getSharedPreferences(Constants.preference, Context.MODE_PRIVATE);
+        preferences = getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE);
     }
 
     @OnClick(R.id.submitButton)
@@ -183,7 +181,7 @@ public class ValidationActivity extends AppCompatActivity {
         recordsList.add(firstName.getText().toString() + "\n" + lastName.getText().toString() + "\n" + phone.getText().toString());
         Set<String> recordsSet = new HashSet<>(recordsList);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putStringSet(Constants.preferenceRecord, recordsSet);
+        editor.putStringSet(Constants.PREFERENCE_RECORD, recordsSet);
         editor.apply();
     }
 }

@@ -7,13 +7,13 @@ import com.google.gson.Gson;
 
 import kozak.labs.ApplicationEx;
 import kozak.labs.Constants;
-import kozak.labs.MVPInterfaces.ListItemFragmentContract;
+import kozak.labs.MVPInterfaces.CharacterDetailsContract;
 
-public class ListItemModel implements ListItemFragmentContract.Model {
+public class DetailsModel implements CharacterDetailsContract.Model {
     private SharedPreferences preferences;
 
-    public ListItemModel() {
-        preferences = ApplicationEx.getContext().getSharedPreferences( Constants.favorites,
+    public DetailsModel() {
+        preferences = ApplicationEx.getContext().getSharedPreferences( Constants.FAVORITES,
                 Context.MODE_PRIVATE);
     }
 

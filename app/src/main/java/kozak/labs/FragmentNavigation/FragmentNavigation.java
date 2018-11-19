@@ -1,10 +1,9 @@
 package kozak.labs.FragmentNavigation;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
-import kozak.labs.MainActivity;
 import kozak.labs.R;
 
 public class FragmentNavigation {
@@ -14,10 +13,13 @@ public class FragmentNavigation {
         this.fragmentManager = fragmentManager;
     }
 
-    public void setFragment(final Fragment fragment) {
-        fragmentManager.beginTransaction()
-                .replace( R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
+    public void setFragment(final Fragment fragment, final boolean addToBackStack) {
+        final FragmentTransaction transaction = fragmentManager.beginTransaction()
+                .replace( R.id.fragment_container, fragment);
+
+        if (addToBackStack) {
+            transaction.addToBackStack( null );
+        }
+        transaction.commit();
     }
 }

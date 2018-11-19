@@ -6,12 +6,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -22,21 +20,16 @@ import kozak.labs.Adapter.RecyclerViewAdapter;
 import kozak.labs.ApplicationEx;
 import kozak.labs.Constants;
 import kozak.labs.Entity.Character;
-import kozak.labs.Entity.Characters;
-import kozak.labs.MVPInterfaces.ListFragmentContract;
+import kozak.labs.MVPInterfaces.CharactersListContract;
 import kozak.labs.MainActivity;
 import kozak.labs.Presenter.ListPresenter;
 import kozak.labs.R;
-import kozak.labs.Retrofit.ApiClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class ListFragment extends Fragment implements ListFragmentContract.View {
+public class ListFragment extends Fragment implements CharactersListContract.View {
 
     private RecyclerViewAdapter adapter;
 
-    private ListFragmentContract.Presenter mPresenter;
+    private ListPresenter mPresenter;
 
     @BindView(R.id.recycler_view)
     protected RecyclerView recyclerView;
@@ -50,7 +43,9 @@ public class ListFragment extends Fragment implements ListFragmentContract.View 
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        mPresenter = new ListPresenter(this);
+        mPresenter = new ListPresenter();
+        mPresenter.attachView(this);
+
         if (getActivity() != null) {
             ButterKnife.bind(this, view);
             initRecyclerView();
@@ -69,6 +64,12 @@ public class ListFragment extends Fragment implements ListFragmentContract.View 
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.onResume();
+    }
+
     private void initRecyclerView() {
         adapter = new RecyclerViewAdapter();
         adapter.setOnCharacterClickListener( new OnCharacterClickListener() {
@@ -79,10 +80,11 @@ public class ListFragment extends Fragment implements ListFragmentContract.View 
                     Bundle bundle = new Bundle();
                     bundle.putSerializable( Constants.ARG_TITLE, character);
 
-                    ListItemFragment listItemFragment = new ListItemFragment();
-                    listItemFragment.setArguments(bundle);
+                    DetailsFragment detailsFragment = new DetailsFragment();
+                    detailsFragment.setArguments(bundle);
 
-                   ApplicationEx.getFragmentNavigation().setFragment(listItemFragment);
+                    ApplicationEx.getFragmentNavigation()
+                           .setFragment( detailsFragment, true);
                 }
             }
         });
@@ -90,7 +92,7 @@ public class ListFragment extends Fragment implements ListFragmentContract.View 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    public void displayItems(List<Character> charactersList) {
+    public void displayCharacters(final List<Character> charactersList) {
         adapter.setItems(charactersList);
         adapter.notifyDataSetChanged();
         noDataTextView.setVisibility(View.INVISIBLE);
@@ -105,6 +107,6 @@ public class ListFragment extends Fragment implements ListFragmentContract.View 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPresenter.onDetachView();
+        mPresenter.detachView();
     }
 }
