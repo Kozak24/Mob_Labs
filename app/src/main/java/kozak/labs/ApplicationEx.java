@@ -39,7 +39,5 @@ public class ApplicationEx extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
-        /*mFragmentNavigation = new FragmentNavigation(
-                ((MainActivity) mContext).getSupportFragmentManager());*/
     }
 }
