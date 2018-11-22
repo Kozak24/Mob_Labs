@@ -1,24 +1,24 @@
 package kozak.labs.Model;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 
 import kozak.labs.ApplicationEx;
-import kozak.labs.Constants;
 import kozak.labs.MVPInterfaces.CharacterDetailsContract;
 
 public class DetailsModel implements CharacterDetailsContract.Model {
-    private SharedPreferences preferences;
+    private SharedPreferences mPreferences;
 
-    public DetailsModel() {
-        preferences = ApplicationEx.getContext().getSharedPreferences( Constants.FAVORITES,
-                Context.MODE_PRIVATE);
+    public DetailsModel(SharedPreferences preferences) {
+        /*preferences = ApplicationEx.getContext().getSharedPreferences( Constants.FAVORITES,
+                Context.MODE_PRIVATE);*/
+        this.mPreferences = preferences;
+
     }
 
     public void setFavorite() {
-        SharedPreferences.Editor prefEditor = preferences.edit();
+        SharedPreferences.Editor prefEditor = mPreferences.edit();
         if(checkFavorite()) {
             prefEditor.remove(ApplicationEx.getCharacter().getName());
             prefEditor.apply();
@@ -31,6 +31,6 @@ public class DetailsModel implements CharacterDetailsContract.Model {
     }
 
     public boolean checkFavorite() {
-        return preferences.contains( ApplicationEx.getCharacter().getName() );
+        return mPreferences.contains( ApplicationEx.getCharacter().getName() );
     }
 }

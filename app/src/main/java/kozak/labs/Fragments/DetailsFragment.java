@@ -1,7 +1,5 @@
 package kozak.labs.Fragments;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
@@ -30,7 +28,6 @@ public class DetailsFragment extends Fragment implements CharacterDetailsContrac
 
     private DetailsRecyclerAdapter adapter;
     private boolean isImageFitToScreen;
-    private SharedPreferences preferences;
 
     private Character character;
 
@@ -62,13 +59,11 @@ public class DetailsFragment extends Fragment implements CharacterDetailsContrac
         if (getActivity() != null) {
             ButterKnife.bind(this, view);
 
-            preferences = getActivity().getSharedPreferences(Constants.FAVORITES,
-                    Context.MODE_PRIVATE);
             initRecyclerView();
             displayItems();
         }
 
-        mPresenter = new DetailsPresenter();
+        mPresenter = new DetailsPresenter( (ApplicationEx) getContext().getApplicationContext() );
         mPresenter.attachView(this);
 
         return view;

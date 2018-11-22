@@ -41,7 +41,7 @@ public class FavoritesFragment extends Fragment implements FavoriteCharactersCon
             initRecyclerView();
         }
 
-        mPresenter = new FavoritesPresenter();
+        mPresenter = new FavoritesPresenter( (ApplicationEx) getContext().getApplicationContext() );
         mPresenter.attachView(this);
 
         return view;

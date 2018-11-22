@@ -2,6 +2,7 @@ package kozak.labs.Presenter;
 
 import java.util.List;
 
+import kozak.labs.ApplicationEx;
 import kozak.labs.Entity.Character;
 import kozak.labs.MVPInterfaces.CharactersListContract;
 import kozak.labs.Model.ListModel;
@@ -10,8 +11,9 @@ public class ListPresenter extends BasePresenter<CharactersListContract.View>
         implements CharactersListContract.Presenter {
     private CharactersListContract.Model mModel;
 
-    public ListPresenter() {
-        this.mModel = new ListModel();
+    public ListPresenter(ApplicationEx applicationEx) {
+        super(applicationEx);
+        this.mModel = applicationEx.getListModel();
     }
 
     @Override

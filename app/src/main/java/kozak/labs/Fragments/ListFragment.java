@@ -43,7 +43,7 @@ public class ListFragment extends Fragment implements CharactersListContract.Vie
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        mPresenter = new ListPresenter();
+        mPresenter = new ListPresenter( (ApplicationEx) getContext().getApplicationContext() );
         mPresenter.attachView(this);
 
         if (getActivity() != null) {

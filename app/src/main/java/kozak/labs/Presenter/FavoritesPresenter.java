@@ -2,6 +2,7 @@ package kozak.labs.Presenter;
 
 import java.util.List;
 
+import kozak.labs.ApplicationEx;
 import kozak.labs.Entity.Character;
 import kozak.labs.MVPInterfaces.FavoriteCharactersContract;
 import kozak.labs.Model.FavoritesModel;
@@ -11,8 +12,9 @@ public class FavoritesPresenter extends BasePresenter<FavoriteCharactersContract
 
     FavoriteCharactersContract.Model mModel;
 
-    public FavoritesPresenter() {
-        mModel = new FavoritesModel();
+    public FavoritesPresenter(ApplicationEx applicationEx) {
+        super(applicationEx);
+        mModel = applicationEx.getFavoritesModel();
     }
 
     @Override
