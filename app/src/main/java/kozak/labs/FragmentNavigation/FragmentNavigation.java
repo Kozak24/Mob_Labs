@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import kozak.labs.Fragments.DetailsFragment;
 import kozak.labs.R;
 
 public class FragmentNavigation {
@@ -21,5 +22,9 @@ public class FragmentNavigation {
             transaction.addToBackStack( null );
         }
         transaction.commit();
+    }
+
+    public void showDetailsFragment() {
+        setFragment(new DetailsFragment(), true);
     }
 }

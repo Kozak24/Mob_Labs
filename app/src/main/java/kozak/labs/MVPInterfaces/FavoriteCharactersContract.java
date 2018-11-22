@@ -11,6 +11,7 @@ public interface FavoriteCharactersContract {
 
     interface Presenter {
         void loadData();
+        void characterSelected(Character character);
     }
 
     interface Model {

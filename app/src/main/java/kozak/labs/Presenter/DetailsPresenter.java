@@ -6,6 +6,7 @@ import kozak.labs.MVPInterfaces.CharacterDetailsContract;
 
 public class DetailsPresenter extends BasePresenter<CharacterDetailsContract.View>
         implements CharacterDetailsContract.Presenter {
+
     private CharacterDetailsContract.Model mModel;
 
     public DetailsPresenter(final ApplicationEx applicationEx) {
@@ -15,9 +16,14 @@ public class DetailsPresenter extends BasePresenter<CharacterDetailsContract.Vie
 
     @Override
     public void makeFavorite() {
-        mModel.setFavorite();
-        Character character = ApplicationEx.getCharacter();
-        mView.displayCharacter(character, mModel.checkFavorite());
+        Character character = getCurrentCharacter();
+        mModel.setFavorite(character);
+        mView.displayCharacter(character, mModel.checkFavorite(character));
+    }
+
+    @Override
+    public Character getCurrentCharacter() {
+        return application.getCurrentCharacter();
     }
 
     @Override
@@ -32,8 +38,8 @@ public class DetailsPresenter extends BasePresenter<CharacterDetailsContract.Vie
 
     @Override
     public void onResume() {
-        Character character = ApplicationEx.getCharacter();
+        Character character = getCurrentCharacter();
 
-        mView.displayCharacter(character, mModel.checkFavorite());
+        mView.displayCharacter(character, mModel.checkFavorite(character));
     }
 }

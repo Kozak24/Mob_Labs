@@ -24,6 +24,12 @@ public class FavoritesPresenter extends BasePresenter<FavoriteCharactersContract
     }
 
     @Override
+    public void characterSelected(Character character) {
+        application.setCurrentCharacter(character);
+        application.getFragmentNavigation().showDetailsFragment();
+    }
+
+    @Override
     public void attachView(FavoriteCharactersContract.View view) {
         super.attachView( view );
     }

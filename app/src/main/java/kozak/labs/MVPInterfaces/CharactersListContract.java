@@ -12,6 +12,7 @@ public interface CharactersListContract {
 
     interface Presenter {
         void loadData();
+        void characterSelected(Character character);
     }
 
     interface Model {

@@ -1,6 +1,5 @@
 package kozak.labs;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,8 +11,7 @@ import kozak.labs.Model.FavoritesModel;
 import kozak.labs.Model.ListModel;
 
 public class ApplicationEx extends Application {
-    private Context mContext;
-    private static Character mCharacter;
+    private Character currentCharacter;
     private FragmentNavigation mFragmentNavigation;
     private SharedPreferences preferences;
 
@@ -29,16 +27,12 @@ public class ApplicationEx extends Application {
         mFragmentNavigation = fragmentNavigation;
     }
 
-    public Context getContext() {
-        return mContext;
+    public Character getCurrentCharacter() {
+        return currentCharacter;
     }
 
-    public static Character getCharacter() {
-        return mCharacter;
-    }
-
-    public static void setCharacter(Character character) {
-        mCharacter = character;
+    public void setCurrentCharacter(Character character) {
+        currentCharacter = character;
     }
 
     public DetailsModel getDetailsModel() {
@@ -60,8 +54,8 @@ public class ApplicationEx extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext = getApplicationContext();
-        preferences = getContext().getSharedPreferences(Constants.FAVORITES, Context.MODE_PRIVATE);
+        preferences = getApplicationContext()
+                .getSharedPreferences(Constants.FAVORITES, Context.MODE_PRIVATE);
 
         detailsModel = new DetailsModel(getSharedPreferences());
         favoritesModel = new FavoritesModel(getSharedPreferences());

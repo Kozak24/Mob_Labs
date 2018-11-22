@@ -75,18 +75,7 @@ public class ListFragment extends Fragment implements CharactersListContract.Vie
         adapter.setOnCharacterClickListener( new OnCharacterClickListener() {
             @Override
             public void onCharacterClick(Character character) {
-                MainActivity mainActivity = (MainActivity) getActivity();
-                if(mainActivity != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable( Constants.ARG_TITLE, character);
-
-                    DetailsFragment detailsFragment = new DetailsFragment();
-                    detailsFragment.setArguments(bundle);
-
-                    ((ApplicationEx) getActivity().getApplication())
-                            .getFragmentNavigation()
-                            .setFragment( detailsFragment, true );
-                }
+                mPresenter.characterSelected(character);
             }
         });
         recyclerView.setAdapter(adapter);

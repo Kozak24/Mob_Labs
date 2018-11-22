@@ -9,10 +9,11 @@ public interface CharacterDetailsContract {
 
     interface Presenter {
         void makeFavorite();
+        Character getCurrentCharacter();
     }
 
     interface Model {
-        void setFavorite();
-        boolean checkFavorite();
+        void setFavorite(Character character);
+        boolean checkFavorite(Character character);
     }
 }

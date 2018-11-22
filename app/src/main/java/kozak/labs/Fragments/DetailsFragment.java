@@ -29,8 +29,6 @@ public class DetailsFragment extends Fragment implements CharacterDetailsContrac
     private DetailsRecyclerAdapter adapter;
     private boolean isImageFitToScreen;
 
-    private Character character;
-
     private DetailsPresenter mPresenter;
 
     @BindView(R.id.detail_char_name)
@@ -51,16 +49,11 @@ public class DetailsFragment extends Fragment implements CharacterDetailsContrac
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_item, container, false);
         ButterKnife.bind(this, view);
-        if(getArguments() != null) {
-            character = (Character) getArguments().getSerializable(Constants.ARG_TITLE);
-            ApplicationEx.setCharacter(character);
-        }
 
         if (getActivity() != null) {
             ButterKnife.bind(this, view);
 
             initRecyclerView();
-            displayItems();
         }
 
         mPresenter = new DetailsPresenter( (ApplicationEx) getContext().getApplicationContext() );
@@ -111,9 +104,11 @@ public class DetailsFragment extends Fragment implements CharacterDetailsContrac
         } else {
             favorite.setImageResource( R.drawable.ic_favorite_border_black_24dp);
         }
+
+        displayVoiceActors(character);
     }
 
-    private void displayItems() {
+    private void displayVoiceActors(Character character) {
         adapter.setItems(character.getVoiceActors());
         adapter.notifyDataSetChanged();
     }

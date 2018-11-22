@@ -27,6 +27,12 @@ public class ListPresenter extends BasePresenter<CharactersListContract.View>
     }
 
     @Override
+    public void characterSelected(Character character) {
+        application.setCurrentCharacter(character);
+        application.getFragmentNavigation().showDetailsFragment();
+    }
+
+    @Override
     public void attachView(CharactersListContract.View view) {
         super.attachView( view );
     }
