@@ -66,8 +66,9 @@ public class FavoritesFragment extends Fragment implements FavoriteCharactersCon
                     DetailsFragment detailsFragment = new DetailsFragment();
                     detailsFragment.setArguments(bundle);
 
-                    ApplicationEx.getFragmentNavigation()
-                            .setFragment( detailsFragment, true);
+                    ((ApplicationEx) getActivity().getApplication())
+                            .getFragmentNavigation()
+                            .setFragment(detailsFragment, true);
                 }
             }
         });

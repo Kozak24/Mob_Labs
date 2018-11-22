@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
 
         fragmentNavigation = new FragmentNavigation(getSupportFragmentManager());
-        ApplicationEx.setFragmentNavigation(fragmentNavigation);
+        ((ApplicationEx) getApplication()).setFragmentNavigation(fragmentNavigation);
         fragmentNavigation.setFragment(new ListFragment(), false);
     }
 
