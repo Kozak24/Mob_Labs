@@ -14,7 +14,7 @@ import java.util.Set;
 
 import butterknife.BindView;
 
-import static kozak.labs.Constants.preferenceRecord;
+import static kozak.labs.Constants.PREFERENCE_RECORD;
 
 public class StorageActivity extends AppCompatActivity {
 
@@ -29,9 +29,9 @@ public class StorageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_storage);
 
-        preferences = getSharedPreferences(Constants.preference, Context.MODE_PRIVATE);
+        preferences = getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE);
 
-        recordsSet = preferences.getStringSet(preferenceRecord, null);
+        recordsSet = preferences.getStringSet( PREFERENCE_RECORD, null);
         List<String> recordsList = new ArrayList<>(recordsSet);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,

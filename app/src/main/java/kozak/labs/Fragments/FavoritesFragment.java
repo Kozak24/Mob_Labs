@@ -1,7 +1,5 @@
 package kozak.labs.Fragments;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,25 +8,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import kozak.labs.Adapter.OnCharacterClickListener;
 import kozak.labs.Adapter.RecyclerViewAdapter;
+import kozak.labs.ApplicationEx;
 import kozak.labs.Entity.Character;
 import kozak.labs.Constants;
+import kozak.labs.MVPInterfaces.FavoriteCharactersContract;
 import kozak.labs.MainActivity;
+import kozak.labs.Presenter.FavoritesPresenter;
 import kozak.labs.R;
 
-public class FavoritesFragment extends Fragment {
+public class FavoritesFragment extends Fragment implements FavoriteCharactersContract.View {
 
     private RecyclerViewAdapter adapter;
-    private List<Character> charactersList;
+    private FavoritesPresenter mPresenter;
 
     @BindView(R.id.favorite_recycler_view)
     protected RecyclerView recyclerView;
@@ -39,57 +36,44 @@ public class FavoritesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
         ButterKnife.bind(this, view);
-        charactersList = null;
 
         if(getActivity() != null) {
             initRecyclerView();
-
-            getPreferences();
         }
+
+        mPresenter = new FavoritesPresenter( (ApplicationEx) getContext().getApplicationContext() );
+        mPresenter.attachView(this);
 
         return view;
     }
 
-    private void getPreferences() {
-        SharedPreferences preferences;
-        preferences = getActivity().getSharedPreferences(
-                Constants.favorites, Context.MODE_PRIVATE);
-        Map<String, ?> map = preferences.getAll();
-        if(map != null) {
-            for (Map.Entry<String, ?> entry : map.entrySet()) {
-                final Character character;
-                character = new Gson().
-                        fromJson(entry.getValue().toString(), Character.class);
-                charactersList.add(character);
-            }
-            displayItems();
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.onResume();
     }
 
     private void initRecyclerView() {
-        charactersList = new ArrayList<>();
         adapter = new RecyclerViewAdapter();
         adapter.setOnCharacterClickListener( new OnCharacterClickListener() {
             @Override
             public void onCharacterClick(Character character) {
-                MainActivity mainActivity = (MainActivity) getActivity();
-                if(mainActivity != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable( Constants.ARG_TITLE, character);
-
-                    ListItemFragment listItemFragment = new ListItemFragment();
-                    listItemFragment.setArguments(bundle);
-
-                    mainActivity.setFragment(listItemFragment);
-                }
+                mPresenter.characterSelected(character);
             }
         });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void displayItems() {
+    @Override
+    public void displayFavoritesCharacters(final List<Character> charactersList) {
         adapter.setItems(charactersList);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
     }
 }

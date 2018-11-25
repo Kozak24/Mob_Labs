@@ -6,12 +6,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -19,21 +17,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import kozak.labs.Adapter.OnCharacterClickListener;
 import kozak.labs.Adapter.RecyclerViewAdapter;
+import kozak.labs.ApplicationEx;
 import kozak.labs.Constants;
 import kozak.labs.Entity.Character;
-import kozak.labs.Entity.Characters;
+import kozak.labs.MVPInterfaces.CharactersListContract;
 import kozak.labs.MainActivity;
+import kozak.labs.Presenter.ListPresenter;
 import kozak.labs.R;
-import kozak.labs.Retrofit.ApiClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class ListFragment extends Fragment {
-
-    private List<Character> charactersList;
+public class ListFragment extends Fragment implements CharactersListContract.View {
 
     private RecyclerViewAdapter adapter;
+
+    private ListPresenter mPresenter;
 
     @BindView(R.id.recycler_view)
     protected RecyclerView recyclerView;
@@ -46,6 +42,10 @@ public class ListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
+
+        mPresenter = new ListPresenter( (ApplicationEx) getContext().getApplicationContext() );
+        mPresenter.attachView(this);
+
         if (getActivity() != null) {
             ButterKnife.bind(this, view);
             initRecyclerView();
@@ -54,40 +54,20 @@ public class ListFragment extends Fragment {
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    makeCall();
+                    mPresenter.loadData();
                     swipeRefreshLayout.setRefreshing(false);
                 }
             });
         }
-        makeCall();
+        mPresenter.loadData();
 
         return view;
     }
 
-    void makeCall() {
-        ApiClient.getApiService().getData().clone().enqueue(new Callback<Characters>() {
-            @Override
-            public void onResponse(Call<Characters> call, Response<Characters> response) {
-                if (getActivity() != null) {
-                    Log.e(getActivity().toString(), getString(R.string.on_response)
-                            + response.toString());
-
-                    if (response.body() != null) {
-                        charactersList = response.body().getCharacters();
-                        displayItems();
-                    } else {
-                        noData();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Characters> call, Throwable t) {
-                Toast.makeText(getActivity(), getString(R.string.on_failure),
-                        Toast.LENGTH_SHORT).show();
-                noData();
-            }
-        });
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.onResume();
     }
 
     private void initRecyclerView() {
@@ -95,31 +75,28 @@ public class ListFragment extends Fragment {
         adapter.setOnCharacterClickListener( new OnCharacterClickListener() {
             @Override
             public void onCharacterClick(Character character) {
-                MainActivity mainActivity = (MainActivity) getActivity();
-                if(mainActivity != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable( Constants.ARG_TITLE, character);
-
-                    ListItemFragment listItemFragment = new ListItemFragment();
-                    listItemFragment.setArguments(bundle);
-
-                    mainActivity.setFragment(listItemFragment);
-                }
+                mPresenter.characterSelected(character);
             }
         });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void displayItems() {
+    public void displayCharacters(final List<Character> charactersList) {
         adapter.setItems(charactersList);
         adapter.notifyDataSetChanged();
         noDataTextView.setVisibility(View.INVISIBLE);
     }
 
-    private void noData() {
+    public void noData() {
         adapter.setItems(null);
         adapter.notifyDataSetChanged();
         noDataTextView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
     }
 }
