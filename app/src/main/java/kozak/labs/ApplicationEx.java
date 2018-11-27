@@ -27,8 +27,6 @@ public class ApplicationEx extends Application {
         mFragmentNavigation = fragmentNavigation;
     }
 
-    typo
-
     public Character getCurrentCharacter() {
         return currentCharacter;
     }
