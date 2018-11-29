@@ -46,7 +46,6 @@ deploy:
   on:
     tags: false
     all_branches: true
-    repo: Kozak24/Mob_Labs
 
 before_script:
   # Prepare pre-accepted licenses to not be promted at installation
