@@ -40,7 +40,8 @@ android:
 
 deploy:
   provider: releases
-  api_key: "$GH_TOKEN"
+  api_key:
+    secure: "7afc452a7806b86bf781f23648386632e23d44c1"
   file: "app/build/outputs/apk/debug/app-debug.apk"
   skip_cleanup: true
   on:
