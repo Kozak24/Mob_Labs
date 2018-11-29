@@ -12,10 +12,6 @@ before_cache:
 
 cache:
   directories:
-    # Android SDK
-    - $HOME/android-sdk-dl
-    - $HOME/android-sdk
-
     # Gradle dependencies
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
@@ -62,4 +58,4 @@ deploy:
   skip_cleanup: true
   on:
     branch: master
-    repo: username/Repo
+    repo: Kozak24/Mob_Labs
