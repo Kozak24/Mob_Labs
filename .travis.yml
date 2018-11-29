@@ -40,6 +40,7 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
     - addon-google_apis-google-$ANDROID_API_LEVEL
+
 before_script:
   # Prepare pre-accepted licenses to not be promted at installation
   - echo yes | sdkmanager "build-tools;27.0.3"
@@ -47,6 +48,18 @@ before_script:
   - mkdir "$ANDROID_HOME/licenses" || true
   - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
   - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+
 script:
   - ./gradlew build check --stacktrace
   - ./gradlew assembleDebug
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "387e116770986e89a0b2083b2bbfa8230968497f"
+  file: "app/build/outputs/apk/debug/app-debug.apk"
+  file_glob: "true"
+  skip_cleanup: true
+  on:
+    branch: master
+    repo: username/Repo
