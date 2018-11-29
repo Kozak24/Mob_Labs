@@ -24,7 +24,7 @@ android:
     - 'android-sdk-preview-license-.+'
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
-    
+
   components:
     - tools
     - platform-tools
@@ -38,6 +38,16 @@ android:
     - extra-android-m2repository
     - addon-google_apis-google-$ANDROID_API_LEVEL
 
+deploy:
+  provider: releases
+  api_key: "7afc452a7806b86bf781f23648386632e23d44c1"
+  file: "app/build/outputs/apk/debug/app-debug.apk"
+  skip_cleanup: true
+  on:
+    tags: false
+    all_branches: true
+    repo: Kozak24/Mob_Labs
+
 before_script:
   # Prepare pre-accepted licenses to not be promted at installation
   - echo yes | sdkmanager "build-tools;27.0.3"
@@ -49,13 +59,3 @@ before_script:
 script:
   - ./gradlew build check --stacktrace
   - ./gradlew assembleDebug
-
-deploy:
-  provider: releases
-  api_key: "7afc452a7806b86bf781f23648386632e23d44c1"
-  file: "app/build/outputs/apk/debug/app-debug.apk"
-  skip_cleanup: true
-  on:
-    tags: false
-    all_branches: true
-    repo: Kozak24/Mob_Labs
