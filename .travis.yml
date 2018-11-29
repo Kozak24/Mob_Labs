@@ -40,8 +40,7 @@ android:
 
 deploy:
   provider: releases
-  api_key:
-    secure: "b2169e60a06b3f992eed3268914d5e08bbd8ca38"
+  api_key: "$Git_Key"
   file: "app/build/outputs/apk/debug/app-debug.apk"
   skip_cleanup: true
   on:
